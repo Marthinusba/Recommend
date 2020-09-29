@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Marthinus Basson" />
+
+
+<title>Recommend</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Recommend</h1>
+<h4 class="author"><em>Marthinus Basson</em></h4>
+<h4 class="date"><em>8/22/2018</em></h4>
+
+
+
+<section id="r-markdown" class="level2">
+<h2>R Markdown</h2>
+<p>Problem: Given a database of books and the ratings by users of books they have read, create a recommendation of 10 books to a new or existing user. The recommendation should be based on item-based collabrative filtering and user based colabrative filtering.</p>
+<p>Load the required packages and the database retaining the user info and book info. Recommender package contain the functions used fot collabrative filtering.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<pre><code>## ── Attaching packages ────────────────</code></pre>
+<pre><code>## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
+## ✔ tidyr   0.8.0     ✔ stringr 1.2.0
+## ✔ readr   1.1.1     ✔ forcats 0.2.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────────────
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(digest)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">library</span>(Recommender)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">library</span>(NNLM)</a></code></pre></div>
+<pre><code>## Warning: package 'NNLM' was built under R version 3.4.4</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">load</span>(<span class="st">&quot;book_ratings.Rdata&quot;</span>)</a></code></pre></div>
+<p>###Item-based colabrartive filtering###</p>
+<p>First we need to create a matrix of the ratings by each user. There is duplicate entries for some books in the database of book information, so first the duplicates needs to removed. Then a the data table of book info and user info are joined together. Then a matrix is created with all the ratings from users againts each book read. The ratings are changed with 1 if it has a rating or a 0 if the user has not read the book. The user id column is removed from the matrix to have it only contain the ratings.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">book_info&lt;-book_info[<span class="op">!</span><span class="kw">duplicated</span>(book_info<span class="op">$</span>Book.Title),] <span class="co">#remove duplicates</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">ratings_user&lt;-<span class="kw">inner_join</span>(book_info,book_ratings) <span class="co">#create database of user ratings and book information</span></a></code></pre></div>
+<pre><code>## Joining, by = &quot;ISBN&quot;</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"> <span class="co">#create matrix of movie ratings per user</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">read_book &lt;-<span class="st"> </span>ratings_user <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">seen =</span> <span class="kw">ifelse</span>(<span class="op">!</span><span class="kw">is.na</span>(Book.Rating),<span class="dv">1</span>,<span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="st">  </span><span class="kw">select</span>(User.ID, Book.Title, seen)<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> Book.Title, <span class="dt">value =</span> seen)</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">read_book&lt;-<span class="st"> </span>read_book  <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">mutate_all</span>(<span class="kw">funs</span>(<span class="kw">replace</span>(.,<span class="kw">is.na</span>(.),<span class="dv">0</span>))) <span class="co">#replac NA's with 0</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">sorted_my_users &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(read_book[,<span class="dv">1</span>]))</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">read_books&lt;-<span class="st"> </span><span class="kw">as.matrix</span>(read_book[,<span class="op">!</span>(<span class="kw">names</span>(read_book) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;User.ID&quot;</span>))])</a></code></pre></div>
+<p>The follwing will recommend a list of movies according to the exisitng user based on item based recommendation. The item recommdation was done by creating a empty matrix the same size as the user matrix. The similarity score is calcaulted between the user and the book rating matrix using the cosine equation. The resulting matrix contains the score bewteen each book and how similar it is to the chosen user in its diagonal row. These values are extracted and the resulting score are ranked in descending order. The top 10 books, which the user has not read, are then displayed.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># get item similarity for certain user</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">recommend</span>(read_books,<span class="dv">13</span>,<span class="dt">type =</span> <span class="st">'item'</span>)</a></code></pre></div>
+<pre><code>##                                                               title
+## 1           the perfect storm : a true story of men against the sea
+## 2                                                    kiss the girls
+## 3                                         the lovely bones: a novel
+## 4                                                      the brethren
+## 5                                                     the testament
+## 6                                            the kitchen god's wife
+## 7                                                  while i was gone
+## 8  harry potter and the sorcerer's stone (harry potter (paperback))
+## 9                                           the secret life of bees
+## 10                                                      good in bed
+##         score
+## 1  0.05394706
+## 2  0.04790039
+## 3  0.04717541
+## 4  0.04710842
+## 5  0.04605263
+## 6  0.04401268
+## 7  0.04330127
+## 8  0.04319772
+## 9  0.04131119
+## 10 0.04124844</code></pre>
+<p>This is to calculate for a new user. First the new user is added to the database and the recommendation is calculated for new user.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">new_user &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">User.ID =</span><span class="dv">300000</span>, <span class="dt">ISBN=</span> <span class="kw">c</span>(<span class="st">&quot;0440234743&quot;</span>, <span class="st">&quot;0971880107&quot;</span>, <span class="st">&quot;0345417623&quot;</span>), <span class="dt">Book.Rating =</span> <span class="kw">as.integer</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">3</span>)))</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">new_book_ratings&lt;-<span class="kw">inner_join</span>(new_user,book_info)</a></code></pre></div>
+<pre><code>## Joining, by = &quot;ISBN&quot;</code></pre>
+<pre><code>## Warning: Column `ISBN` joining factor and character vector, coercing into
+## character vector</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">new_ratings_user&lt;-<span class="kw">rbind</span>(new_book_ratings,ratings_user)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">new_read_book &lt;-<span class="st"> </span>new_ratings_user <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">seen =</span> <span class="kw">ifelse</span>(<span class="op">!</span><span class="kw">is.na</span>(Book.Rating),<span class="dv">1</span>,<span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">  </span><span class="kw">select</span>(User.ID, Book.Title, seen)<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> Book.Title, <span class="dt">value =</span> seen)</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">new_read_book&lt;-<span class="st"> </span>new_read_book  <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">mutate_all</span>(<span class="kw">funs</span>(<span class="kw">replace</span>(.,<span class="kw">is.na</span>(.),<span class="dv">0</span>))) <span class="co">#replac NA's with 0</span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8">new_sorted_my_users &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">unlist</span>(new_read_book[,<span class="dv">1</span>]))</a>
+<a class="sourceLine" id="cb16-9" data-line-number="9">new_read_books&lt;-<span class="st"> </span><span class="kw">as.matrix</span>(new_read_book[,<span class="op">!</span>(<span class="kw">names</span>(new_read_book) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;User.ID&quot;</span>))])</a>
+<a class="sourceLine" id="cb16-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="kw">recommend</span>(new_read_books,<span class="dv">149</span>,<span class="dt">type=</span><span class="st">'item'</span>)</a></code></pre></div>
+<pre><code>##                                              title      score
+## 1                                      wild animus 0.14470109
+## 2                        the lovely bones: a novel 0.12459887
+## 3                       interview with the vampire 0.10859807
+## 4                                the da vinci code 0.10715324
+## 5                              angels &amp;amp; demons 0.10223104
+## 6                                         the firm 0.09397618
+## 7  divine secrets of the ya-ya sisterhood: a novel 0.09105593
+## 8                                the joy luck club 0.08946481
+## 9                    the poisonwood bible: a novel 0.08872961
+## 10                           house of sand and fog 0.08862601</code></pre>
+<p>The follwing function will return an approximate list of recommended books for selected user, using user based [This is not completely correct list of recommendations, but with some work it can produce the correct list]. The recommender is based on the item recommender system. It extracts the top books that are similar to that of the chosen user, and then recommends the books those users have read and removes that books that have been read by chosen user.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># get user similarity for certain user</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">recommend</span>(read_books,<span class="dv">13</span>,<span class="dt">type =</span> <span class="st">'user'</span>,<span class="dt">raw_data =</span> read_book)</a></code></pre></div>
+<pre><code>##  [1] &quot;the book of ruth (oprah's book club (paperback))&quot;          
+##  [2] &quot;wild animus&quot;                                               
+##  [3] &quot;bridget jones's diary&quot;                                     
+##  [4] &quot;the nanny diaries: a novel&quot;                                
+##  [5] &quot;the catcher in the rye&quot;                                    
+##  [6] &quot;the queen of the damned (vampire chronicles (paperback))&quot;  
+##  [7] &quot;harry potter and the chamber of secrets (book 2)&quot;          
+##  [8] &quot;the bad beginning (a series of unfortunate events, book 1)&quot;
+##  [9] &quot;bel canto: a novel&quot;                                        
+## [10] &quot;the lovely bones: a novel&quot;</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co">#raw_data is a data table without the user id removes to cross reference the books against the users.</span></a></code></pre></div>
+<p>This function is just a different way of using item based recommendation just for interest sake.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># get item similarity for certain user</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">recommend</span>(read_books,<span class="dv">13</span>,<span class="dt">type =</span> <span class="st">'item2'</span>)</a></code></pre></div>
+<pre><code>##  [1] &quot;the lovely bones: a novel&quot;                      
+##  [2] &quot;the da vinci code&quot;                              
+##  [3] &quot;divine secrets of the ya-ya sisterhood: a novel&quot;
+##  [4] &quot;angels &amp;amp; demons&quot;                            
+##  [5] &quot;the firm&quot;                                       
+##  [6] &quot;house of sand and fog&quot;                          
+##  [7] &quot;the secret life of bees&quot;                        
+##  [8] &quot;snow falling on cedars&quot;                         
+##  [9] &quot;the bridges of madison county&quot;                  
+## [10] &quot;summer sisters&quot;                                 
+## [11] &quot;good in bed&quot;</code></pre>
+<p>###Matrix factorisation### This is used to check the accuracy of the suggested ratings for books that was not rated.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">read_books_fac &lt;-<span class="st"> </span>ratings_user <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(User.ID, Book.Title, Book.Rating)<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> Book.Title, <span class="dt">value =</span> Book.Rating)<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="st"> </span><span class="kw">mutate_all</span>(<span class="kw">funs</span>(<span class="kw">replace</span>(.,<span class="kw">is.na</span>(.),<span class="dv">0</span>)))</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">read_books_fac&lt;-<span class="st"> </span><span class="kw">as.matrix</span>(read_books_fac[,<span class="op">!</span>(<span class="kw">names</span>(read_books_fac) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;User.ID&quot;</span>))])</a>
+<a class="sourceLine" id="cb23-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb23-8" data-line-number="8"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb23-10" data-line-number="10">k &lt;-<span class="dv">35</span>;</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11">init &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">W =</span> <span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="kw">nrow</span>(read_books_fac)<span class="op">*</span>k), <span class="dt">ncol =</span> k),</a>
+<a class="sourceLine" id="cb23-12" data-line-number="12">    <span class="dt">H =</span> <span class="kw">matrix</span>(<span class="kw">runif</span>(<span class="kw">ncol</span>(read_books_fac)<span class="op">*</span>k), <span class="dt">nrow =</span> k))</a>
+<a class="sourceLine" id="cb23-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb23-14" data-line-number="14"><span class="kw">nnmf</span>(read_books_fac,k, <span class="dt">init =</span> init, <span class="dt">max.iter =</span> <span class="dv">10000</span>,<span class="dt">method =</span> <span class="st">'scd'</span>,<span class="dt">loss =</span> <span class="st">'mkl'</span>)</a></code></pre></div>
+<pre><code>## Non-negative matrix factorization:
+##    Algorithm: Sequential coordinate-wise descent
+##         Loss: Mean Kullback-Leibler divergence
+##          MSE: 0.6245891
+##          MKL: 0.1679827
+##       Target: 0.1679827
+##    Rel. tol.: 2.31e-15
+## Total epochs: 201
+## # Interation: 201
+## Running time:
+##    user  system elapsed 
+## 199.749   1.094 203.565</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">predicted_ratings &lt;-<span class="st"> </span>init[[<span class="st">'W'</span>]] <span class="op">%*%</span><span class="st"> </span>init[[<span class="st">'H'</span>]]</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">matrix_fac&lt;-<span class="kw">as.matrix</span>(<span class="kw">rbind</span>(<span class="kw">round</span>(predicted_ratings[<span class="dv">1</span>,], <span class="dv">1</span>), <span class="kw">as.numeric</span>(read_books_fac[<span class="dv">15</span>,])))</a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">matrix_fac</a></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+## [1,]  9.8  7.9  8.6  7.5  9.5 10.7  9.2  8.8  9.2   9.3   9.4   9.7     8
+## [2,]  0.0  0.0  0.0  0.0  0.0  0.0  7.0  7.0  0.0   0.0   0.0   0.0     0
+##      [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]
+## [1,]   7.9   9.7   9.6   7.4   8.7  10.3   8.7   8.9   8.4  10.1   8.2
+## [2,]   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+##      [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35]
+## [1,]   8.3  10.3   8.3   9.3   8.3   8.7   8.5   7.8   8.6   9.2   8.8
+## [2,]   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+##      [,36] [,37] [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45] [,46]
+## [1,]   7.7   8.7   8.5   9.7  11.1   9.3   8.3   8.4    11   8.7     8
+## [2,]   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0     0   0.0     0
+##      [,47] [,48] [,49] [,50] [,51] [,52] [,53] [,54] [,55] [,56] [,57]
+## [1,]   9.6   9.4   9.5  11.4   8.3   9.8   8.8   7.9   8.9  10.3  10.6
+## [2,]   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+##      [,58] [,59] [,60] [,61] [,62] [,63] [,64] [,65] [,66] [,67] [,68]
+## [1,]   8.5     9   8.5   9.8   7.4     9   8.5   9.8   9.6   9.4   8.6
+## [2,]   0.0     0   0.0   9.0   0.0     0   0.0   0.0   0.0   0.0   0.0
+##      [,69] [,70] [,71] [,72] [,73] [,74] [,75] [,76] [,77] [,78] [,79]
+## [1,]   8.7   9.6   9.9   9.3   8.9   9.1   9.9   8.9   9.3   8.7     7
+## [2,]   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0     0
+##      [,80] [,81] [,82] [,83] [,84] [,85] [,86] [,87] [,88] [,89] [,90]
+## [1,]   7.8   9.3   8.9     9   8.9   9.3   9.6   9.4  10.3  10.4   7.9
+## [2,]   0.0   0.0   0.0     0   0.0   0.0   0.0   0.0   0.0  10.0   0.0
+##      [,91] [,92] [,93] [,94] [,95] [,96] [,97] [,98] [,99] [,100] [,101]
+## [1,]  10.8     9  10.3     9   9.7  11.5  10.5   8.2   8.4    9.6    9.5
+## [2,]   0.0     0   0.0     0   0.0   0.0   0.0   0.0   0.0    0.0    0.0
+##      [,102] [,103] [,104] [,105] [,106] [,107] [,108] [,109] [,110] [,111]
+## [1,]    9.3    8.8   10.7    9.1    9.7    8.5    8.7    8.1    9.9    9.4
+## [2,]    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+##      [,112] [,113] [,114] [,115] [,116] [,117] [,118] [,119] [,120] [,121]
+## [1,]    9.3    9.2    8.6    8.9   10.2    9.6    8.5    9.5      9    7.8
+## [2,]    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0      0    9.0
+##      [,122] [,123] [,124] [,125] [,126] [,127] [,128] [,129] [,130] [,131]
+## [1,]   10.1    8.1    8.8    8.7   11.1    8.6   10.3    8.1    9.3    9.5
+## [2,]    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+##      [,132] [,133] [,134] [,135] [,136] [,137] [,138] [,139] [,140] [,141]
+## [1,]    9.6    8.8    8.8   10.2    8.1    8.8    8.5    9.5    9.5    8.9
+## [2,]    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0
+##      [,142] [,143] [,144] [,145] [,146] [,147] [,148] [,149]
+## [1,]   10.4    7.7    8.2    7.1   10.4    7.4   10.1    9.8
+## [2,]    0.0    0.0    0.0    0.0    0.0    0.0    0.0    0.0</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">predicted_ratings&lt;-<span class="kw">as.matrix</span>(predicted_ratings)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw">colnames</span>(predicted_ratings)&lt;-<span class="kw">colnames</span>(read_books)</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3"><span class="kw">rownames</span>(predicted_ratings)&lt;-<span class="kw">rownames</span>(read_books)</a></code></pre></div>
+<p>The nect chunk of code it to use the matrix factorization to recommend books to a chosen user.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">data&lt;-predicted_ratings</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">criteria &lt;-<span class="st"> </span><span class="dv">13</span></a>
+<a class="sourceLine" id="cb28-3" data-line-number="3"> cosine_sim &lt;-<span class="st"> </span><span class="cf">function</span>(a, b){<span class="kw">crossprod</span>(a, b) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">crossprod</span>(a) <span class="op">*</span><span class="st"> </span><span class="kw">crossprod</span>(b))} <span class="co">#function to calculate similarity</span></a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">    item_similarities_fac =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow=</span><span class="kw">ncol</span>(data),<span class="dt">ncol=</span><span class="kw">ncol</span>(data)) <span class="co">#create blank place holder matrix</span></a>
+<a class="sourceLine" id="cb28-5" data-line-number="5">     item_matrice_fac&lt;-<span class="kw">matrix</span>(<span class="kw">rep</span>(data[,criteria],<span class="dt">times=</span><span class="kw">ncol</span>(data) ),<span class="dt">ncol =</span> <span class="kw">ncol</span>(data),<span class="dt">nrow =</span> <span class="kw">nrow</span>(data),<span class="dt">byrow =</span> <span class="ot">TRUE</span>) <span class="co">#fil matrix with one item ratings</span></a>
+<a class="sourceLine" id="cb28-6" data-line-number="6">     item_similarities_fac &lt;-<span class="st"> </span><span class="kw">cosine_sim</span>(item_matrice_fac,data) <span class="co">#calculate the similarities between user matrix and the rest of the database ratings</span></a>
+<a class="sourceLine" id="cb28-7" data-line-number="7">     item_similarities_fac&lt;-<span class="kw">as.matrix</span>(<span class="kw">diag</span>(item_similarities_fac)) <span class="co">#the diagonal values of matrix is the similarity bewteen chosen item and rest of the items</span></a>
+<a class="sourceLine" id="cb28-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb28-9" data-line-number="9">     <span class="kw">colnames</span>(item_similarities_fac) &lt;-<span class="st"> 'user score'</span> <span class="co">#column name of the similarity vecetor</span></a>
+<a class="sourceLine" id="cb28-10" data-line-number="10">     <span class="kw">rownames</span>(item_similarities_fac) &lt;-<span class="st"> </span><span class="kw">colnames</span>(data) <span class="co">#row names of the similarity vector</span></a>
+<a class="sourceLine" id="cb28-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb28-12" data-line-number="12">  item_similarities_fac&lt;-<span class="kw">as.data.frame</span>(item_similarities_fac)</a>
+<a class="sourceLine" id="cb28-13" data-line-number="13">   item_similarities_fac<span class="op">%&gt;%</span><span class="kw">mutate</span>(<span class="dt">title =</span><span class="kw">colnames</span>(data))<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(item_similarities_fac<span class="op">$</span><span class="st">`</span><span class="dt">user score</span><span class="st">`</span>)) <span class="op">%&gt;%</span><span class="kw">head</span>(<span class="dv">10</span>)</a></code></pre></div>
+<pre><code>##    user score                                                    title
+## 1   0.9876023                                    house of sand and fog
+## 2   0.9875452   a is for alibi (kinsey millhone mysteries (paperback))
+## 3   0.9874854               full house (janet evanovich's full series)
+## 4   0.9874606 confessions of a shopaholic (summer display opportunity)
+## 5   0.9874435                                          the beach house
+## 6   0.9873553                                    bridget jones's diary
+## 7   0.9873545                                 white oleander : a novel
+## 8   0.9873487                                              wild animus
+## 9   0.9873422                                               the reader
+## 10  0.9873378                    she's come undone (oprah's book club)</code></pre>
+</section>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

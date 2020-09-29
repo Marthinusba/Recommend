@@ -1,0 +1,16 @@
+Package: Recommender
+Title: Book Recommender
+Version: 0.0.0.9000
+Authors@R: person("Marthinus", "Basson", email = "basson.marthinus@gmail.com", role = c("aut", "cre"))
+Description: The package is used to recommend a book to a certain user from a database of ratings.
+Depends: R (>= 3.4.3)
+License: None
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
+Suggests: testthat, knitr, rmarkdown
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2018-09-03 21:14:09 UTC; marthinusbasson
+Author: Marthinus Basson [aut, cre]
+Maintainer: Marthinus Basson <basson.marthinus@gmail.com>

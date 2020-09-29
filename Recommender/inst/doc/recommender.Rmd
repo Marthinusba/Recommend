@@ -1,0 +1,144 @@
+---
+title: "Recommend"
+author: "Marthinus Basson"
+date: "8/22/2018"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Problem:
+Given a database of books and the ratings by users of books they have read, create a recommendation of 10 books to a new or existing user. The recommendation should be based on item-based collabrative filtering and user based colabrative filtering.
+
+Load the required packages and the database retaining the user info and book info. Recommender package contain the functions used fot collabrative filtering.
+```{r}
+library(tidyverse)
+library(digest)
+library(Recommender)
+library(NNLM)
+load("book_ratings.Rdata")
+```
+
+###Item-based colabrartive filtering###
+
+First we need to create a matrix of the ratings by each user.
+There is duplicate entries for some books in the database of book information, so first the duplicates needs to removed.
+Then a the data table of book info and user info are joined together.
+Then a matrix is created with all the ratings from users againts each book read.
+The ratings are changed with 1 if it has a rating or a 0 if the user has not read the book.
+The user id column is removed from the matrix to have it only contain the ratings.
+
+```{r}
+book_info<-book_info[!duplicated(book_info$Book.Title),] #remove duplicates
+ratings_user<-inner_join(book_info,book_ratings) #create database of user ratings and book information
+ #create matrix of movie ratings per user
+read_book <- ratings_user %>%
+  mutate(seen = ifelse(!is.na(Book.Rating),1,0)) %>% 
+  select(User.ID, Book.Title, seen)%>%
+  spread(key = Book.Title, value = seen)
+read_book<- read_book  %>%  mutate_all(funs(replace(.,is.na(.),0))) #replac NA's with 0
+sorted_my_users <- as.character(unlist(read_book[,1]))
+read_books<- as.matrix(read_book[,!(names(read_book) %in% c("User.ID"))])
+
+
+```
+
+The follwing will recommend a list of movies according to the exisitng user based on item based recommendation.
+The item recommdation was done by creating a empty matrix the same size as the user matrix. The similarity score is calcaulted between the user and the book rating matrix using the cosine equation. The resulting matrix contains the score bewteen each book and how similar it is to the chosen user in its diagonal row. These values are extracted and the resulting score are ranked in descending order. The top 10 books, which the user has not read, are then displayed.
+```{r}
+# get item similarity for certain user
+
+recommend(read_books,13,type = 'item')
+
+```
+This is to calculate for a new user. First the new user is added to the database and the recommendation is calculated for new user.
+```{r}
+new_user <- data.frame(User.ID =300000, ISBN= c("0440234743", "0971880107", "0345417623"), Book.Rating = as.integer(c(2, 5, 3)))
+
+new_book_ratings<-inner_join(new_user,book_info)
+new_ratings_user<-rbind(new_book_ratings,ratings_user)
+
+new_read_book <- new_ratings_user %>%
+  mutate(seen = ifelse(!is.na(Book.Rating),1,0)) %>% 
+  select(User.ID, Book.Title, seen)%>%
+  spread(key = Book.Title, value = seen)
+new_read_book<- new_read_book  %>%  mutate_all(funs(replace(.,is.na(.),0))) #replac NA's with 0
+new_sorted_my_users <- as.character(unlist(new_read_book[,1]))
+new_read_books<- as.matrix(new_read_book[,!(names(new_read_book) %in% c("User.ID"))])
+
+recommend(new_read_books,149,type='item')
+```
+
+The follwing function will return an approximate list of recommended books for selected user, using user based 
+[This is not completely correct list of recommendations, but with some work it can produce the correct list]. The recommender is based on the item recommender system. It extracts the top books that are similar to that of the chosen user, and then recommends the books those users have read and removes that books that have been read by chosen user.
+```{r}
+# get user similarity for certain user
+recommend(read_books,13,type = 'user',raw_data = read_book)
+#raw_data is a data table without the user id removes to cross reference the books against the users.
+```
+
+This function is just a different way of using item based recommendation just for interest sake.
+```{r}
+# get item similarity for certain user
+recommend(read_books,13,type = 'item2')
+
+
+```
+
+###Matrix factorisation###
+This is used to check the accuracy of the suggested ratings for books that was not rated.
+```{r}
+
+read_books_fac <- ratings_user %>% 
+  select(User.ID, Book.Title, Book.Rating)%>%
+  spread(key = Book.Title, value = Book.Rating)%>%
+ mutate_all(funs(replace(.,is.na(.),0)))
+
+read_books_fac<- as.matrix(read_books_fac[,!(names(read_books_fac) %in% c("User.ID"))])
+
+set.seed(123)
+
+k <-35;
+init <- list(W = matrix(runif(nrow(read_books_fac)*k), ncol = k),
+    H = matrix(runif(ncol(read_books_fac)*k), nrow = k))
+
+nnmf(read_books_fac,k, init = init, max.iter = 10000,method = 'scd',loss = 'mkl')
+
+
+
+predicted_ratings <- init[['W']] %*% init[['H']]
+matrix_fac<-as.matrix(rbind(round(predicted_ratings[1,], 1), as.numeric(read_books_fac[15,])))
+matrix_fac
+predicted_ratings<-as.matrix(predicted_ratings)
+colnames(predicted_ratings)<-colnames(read_books)
+rownames(predicted_ratings)<-rownames(read_books)
+
+
+```
+The nect chunk of code it to use the matrix factorization to recommend books to a chosen user.
+
+```{r}
+data<-predicted_ratings
+criteria <- 13
+ cosine_sim <- function(a, b){crossprod(a, b) / sqrt(crossprod(a) * crossprod(b))} #function to calculate similarity
+    item_similarities_fac = matrix(0, nrow=ncol(data),ncol=ncol(data)) #create blank place holder matrix
+     item_matrice_fac<-matrix(rep(data[,criteria],times=ncol(data) ),ncol = ncol(data),nrow = nrow(data),byrow = TRUE) #fil matrix with one item ratings
+     item_similarities_fac <- cosine_sim(item_matrice_fac,data) #calculate the similarities between user matrix and the rest of the database ratings
+     item_similarities_fac<-as.matrix(diag(item_similarities_fac)) #the diagonal values of matrix is the similarity bewteen chosen item and rest of the items
+
+     colnames(item_similarities_fac) <- 'user score' #column name of the similarity vecetor
+     rownames(item_similarities_fac) <- colnames(data) #row names of the similarity vector
+
+  item_similarities_fac<-as.data.frame(item_similarities_fac)
+   item_similarities_fac%>%mutate(title =colnames(data))%>% arrange(desc(item_similarities_fac$`user score`)) %>%head(10)
+```
+
