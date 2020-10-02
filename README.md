@@ -62,7 +62,7 @@ ratings_user<-inner_join(book_info,book_ratings) #create database of user rating
     ## Joining, by = "ISBN"
 
 ``` r
- #create matrix of movie ratings per user
+ #create matrix of mbook ratings per user
 read_book <- ratings_user %>%
   mutate(seen = ifelse(!is.na(Book.Rating),1,0)) %>% 
   select(User.ID, Book.Title, seen)%>%
